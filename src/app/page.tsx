@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import "./style.css";
 
 const ARESComponent: React.FC = () => {
   const [selectedClient, setSelectedClient] =
     useState<string>("Select a Customer");
-  const [pageNumber, setPageNumber] = useState<number | string>("");
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
 
@@ -18,11 +16,6 @@ const ARESComponent: React.FC = () => {
   const selectClient = (client: string) => {
     setSelectedClient(client);
     toggleDropdown(); // Fecha o dropdown após a seleção
-  };
-
-  const handlePageNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPageNumber(value ? parseInt(value) : "");
   };
 
   const toggleDropdown = () => {
@@ -38,24 +31,35 @@ const ARESComponent: React.FC = () => {
       return;
     }
 
-    // Configura o FormData para enviar o arquivo
     const formData = new FormData();
-    formData.append("file", file); // 'file' é o campo esperado pelo backend
+    formData.append("file", file);
 
-    fetch("http://localhost:7001/upload", {
+    const queryParams = new URLSearchParams({
+      type: selectedClient,
+    }).toString();
+
+    fetch(`http://localhost:7001/upload?${queryParams}`, {
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Sucesso:", data);
-        // Você pode atualizar o progresso ou exibir uma mensagem de sucesso
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.blob(); // Converte a resposta em um Blob
       })
-      .catch((error) => {
-        console.error("Erro ao enviar arquivo:", error);
-      });
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob); // Cria uma URL para o blob
+        const a = document.createElement("a"); // Cria um elemento <a>
+        a.style.display = "none";
+        a.href = url;
+        a.download = "planilha_final.xlsx"; // Nome do arquivo para download
+        document.body.appendChild(a);
+        a.click(); // Simula o clique no link
+        window.URL.revokeObjectURL(url); // Limpa a URL criada
+      })
+      .catch((error) => console.error("Error downloading file:", error));
 
-    // Simula o progresso da barra
     let progressValue = 0;
     const interval = setInterval(() => {
       progressValue += 10;
@@ -66,123 +70,60 @@ const ARESComponent: React.FC = () => {
     }, 500);
   };
 
-  const startProcess2 = () => {
-    fetch("http://localhost:7001/upload/start-python", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Sucesso:", data);
-      })
-      .catch((error) => {
-        console.error("Erro ao enviar arquivo:", error);
-      });
-  };
-
-  const downloadExcel = () => {
-    const url = "http://localhost:7001/upload/download-excel";
-  
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.blob(); // Converte a resposta em um Blob
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob); // Cria uma URL para o blob
-        const a = document.createElement('a'); // Cria um elemento <a>
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'planilha_final.xlsx'; // Nome do arquivo para download
-        document.body.appendChild(a);
-        a.click(); // Simula o clique no link
-        window.URL.revokeObjectURL(url); // Limpa a URL criada
-      })
-      .catch((error) => console.error("Error downloading file:", error));
-  };
-  
-  
-
   return (
-    <div className="main-container">
-      <div className="header">
-        <h1 className="maintittle">ARES</h1>
-        <div className="stroke"></div>
+    <div className="flex flex-col w-full h-screen bg-[#67A4FF]">
+      <div className="flex flex-col w-full h-auto items-center gap-3">
+        <h1 className="text-7xl text-white font-semibold">Brascabos</h1>
+        <h2 className="text-5xl text-white">ARES</h2>
       </div>
-
-      <div className="drawingcontainer">
-        <h3 className="h3">Drawing View</h3>
-        <div className="drawingView" id="filePreview">
-          <button id="folderbutton">
-            <img className="icon" src="./src/folder.ico" alt="folder icon" />
-          </button>
-          <input type="file" onChange={handleFileChange} />
-        </div>
-      </div>
-
-      <div className="bottomcontainer">
-        <div className="settings-container">
-          <h3 className="h3">Settings</h3>
-          <div className="settings-1">
-            <div className="settings-2">
-              <div className="dropdown">
-                <button
-                  id="dropdownButton"
-                  onClick={toggleDropdown}
-                  className="dropbtn"
-                >
-                  {selectedClient}
-                </button>
-                <div id="myDropdown" className="dropdown-content">
-                  <a onClick={() => selectClient("HPE")}>HPE</a>
-                  <a onClick={() => selectClient("Jacto")}>Jacto</a>
-                  <a onClick={() => selectClient("Caterpillar")}>Caterpillar</a>
-                  <a onClick={() => selectClient("CNH")}>CNH</a>
-                  <a onClick={() => selectClient("AGCO")}>AGCO</a>
-                  <a onClick={() => selectClient("Komatsu")}>Komatsu</a>
-                  <a onClick={() => selectClient("John Deere")}>John Deere</a>
-                  <a onClick={() => selectClient("Whirlpool")}>Whirlpool</a>
-                  <a onClick={() => selectClient("Electrolux")}>Electrolux</a>
-                  <a onClick={() => selectClient("JCB")}>JCB</a>
-                  <a onClick={() => selectClient("Embraco")}>Embraco</a>
-                </div>
-              </div>
-
-              <input
-                id="pgs-number"
-                placeholder="Page number"
-                type="number"
-                value={pageNumber}
-                onChange={handlePageNumberChange}
-              />
-            </div>
+      <div className="flex flex-col w-full h-full items-center mt-7 gap-5">
+        <div className="flex w-[80%] h-[60%] bg-gray-300 p-2 rounded-md">
+          <div className="flex w-full h-full bg-white rounded-md items-center justify-center">
+            <input
+              type="file"
+              className="block w-auto h-[40px] text-sm text-gray-500 
+                 file:mr-4 file:py-2 file:px-4 
+                 file:rounded-md file:border-0
+                 file:text-sm file:font-semibold
+                 file:bg-blue-50 file:text-blue-700
+                 hover:file:bg-blue-100"
+              onChange={handleFileChange}
+            />
           </div>
         </div>
 
-        <div className="separate"></div>
+        <div className="flex flex-col w-[80%] h-auto items-center gap-3">
+          <h3 className="flex text-2xl font-semibold">Barra de conclusão</h3>
+          <div className="flex w-full h-[40px] bg-gray-300 rounded-sm"></div>
+          <div className="flex w-full h-auto items-center justify-between mt-3">
+            <div className="flex w-[300px] h-[100px] bg-gray-300 rounded-md">
+              <select
+                onChange={(e) => selectClient(e.target.value)}
+                className="w-full h-auto bg-gray-300 border-none text-2xl px-3 font-semibold text-black rounded-md"
+                value={selectedClient}
+              >
+                <option value="HPE">HPE</option>
+                <option value="Jacto">Jacto</option>
+                <option value="Caterpillar">Caterpillar</option>
+                <option value="CNH">CNH</option>
+                <option value="AGCO">AGCO</option>
+                <option value="Komatsu">Komatsu</option>
+                <option value="John Deere">John Deere</option>
+                <option value="Whirlpool">Whirlpool</option>
+                <option value="Electrolux">Electrolux</option>
+                <option value="JCB">JCB</option>
+                <option value="Embraco">Embraco</option>
+              </select>
+            </div>
 
-        <div className="files-container">
-          <h3 className="h3">Files</h3>
-          <div id="files">{file && <p>{file.name}</p>}</div>
+            <button
+              onClick={() => startProcess()}
+              className="flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out"
+            >
+              Iniciar Conversão
+            </button>
+          </div>
         </div>
-      </div>
-
-      <div className="button-container">
-        <button id="start-button" onClick={startProcess}>
-          process1
-        </button>
-        <button id="start-button" onClick={startProcess2}>
-          process2
-        </button>
-        <button id="start-button" onClick={downloadExcel}>
-          downloadExcel
-        </button>
-      </div>
-
-      <div id="progress-bar-container">
-        <div id="progress-bar" style={{ width: `${progress}%` }}></div>
-        <h3 id="progress-bar-text">{progress}%</h3>
       </div>
     </div>
   );
