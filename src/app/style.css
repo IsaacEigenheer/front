@@ -1,0 +1,258 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
+.maintittle {
+  color: black;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  font-family: "arial";
+}
+
+.stroke {
+  width: 900%;
+  height: 1px;
+  background-color: black;
+}
+
+.drawingcontainer {
+  margin-top: 40px;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  width: 70%;
+  flex-grow: 1;
+}
+
+.h3 {
+  align-self: flex-start;
+  font-family: "arial";
+  margin-bottom: 5px;
+  margin-left: 10px;
+}
+
+.drawingView {
+  display: flex;
+  width: 100%;
+  height: 500px;
+  border: solid 2px black;
+  border-radius: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+#folderbutton {
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.bottomcontainer {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  width: 70%;
+  margin-top: 80px;
+}
+
+.settings-container {
+  flex: 5;
+  height: 200px;
+}
+
+.files-container {
+  flex: 6;
+  height: 200px;
+}
+
+.settings-1 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px black;
+  border-radius: 15px;
+}
+
+.settings-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropbtn {
+  margin-top: 25px;
+  margin-left: 25px;
+  width: 80%;
+  height: 50px;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  font-family: "arial";
+  border-radius: 30px;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+  background-color: black;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  margin-top: 10px;
+  margin-left: 40px;
+  font-family: "arial";
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.show {
+  display: block;
+}
+
+#pgs-number {
+  margin-top: 30px;
+  margin-left: 25px;
+  padding: 12px;
+  width: 70%;
+  height: 20px;
+  font-size: 16px;
+  font-family: "arial";
+  border: 2px solid black;
+  border-radius: 30px;
+}
+
+.settings-3 {
+  margin-right: 15px;
+  margin-left: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-txt {
+  font-size: 1vw;
+  font-family: "arial";
+}
+
+#checkbox {
+  height: 20px;
+  width: 20px;
+}
+
+#files {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: solid 2px black;
+  border-radius: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.separate {
+  flex: 1;
+}
+
+.button-container {
+  margin-top: 120px;
+  display: flex;
+  height: 50px;
+  border: solid 2px black;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  padding: 5px;
+}
+
+#start-button {
+  border: none;
+  background: transparent;
+  font-family: "arial";
+  font-size: 26px;
+  padding: 14px;
+  cursor: pointer;
+  color: white;
+}
+
+#fileInput {
+  display: none;
+}
+
+.download-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #007bff;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.download-link:hover {
+  text-decoration: underline;
+}
+.download-link i {
+  color: green;
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+#progress-bar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+}
+
+#progress-bar {
+  margin-top: 20px;
+  width: 1600px;
+  height: 60px;
+  border: 3px solid black;
+  border-radius: 100px;
+  background: linear-gradient(to left, white 100%, rgb(37, 109, 241) 100%) right;
+}
+
+#progress-bar-text {
+  color: black;
+  font-family: "roboto";
+  font-size: 32px;
+}
