@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 
 const ARESComponent: React.FC = () => {
   const [selectedClient, setSelectedClient] =
     useState<string>("Select a Customer");
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
+  const socket = io("http://localhost:7001"); // URL do seu servidor WebSocket
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -57,18 +59,20 @@ const ARESComponent: React.FC = () => {
         document.body.appendChild(a);
         a.click(); // Simula o clique no link
         window.URL.revokeObjectURL(url); // Limpa a URL criada
+        setProgress(0);
       })
       .catch((error) => console.error("Error downloading file:", error));
-
-    let progressValue = 0;
-    const interval = setInterval(() => {
-      progressValue += 10;
-      setProgress(progressValue);
-      if (progressValue >= 100) {
-        clearInterval(interval);
-      }
-    }, 500);
   };
+
+  useEffect(() => {
+    socket.on("progress", (data: number) => {
+      setProgress(data); // Atualiza o progresso recebido do WebSocket
+    });
+
+    return () => {
+      socket.off("progress"); // Limpa o listener quando o componente é desmontado
+    };
+  }, [socket]);
 
   return (
     <div className="flex flex-col w-full h-screen bg-[#67A4FF]">
@@ -94,7 +98,15 @@ const ARESComponent: React.FC = () => {
 
         <div className="flex flex-col w-[80%] h-auto items-center gap-3">
           <h3 className="flex text-2xl font-semibold">Barra de conclusão</h3>
-          <div className="flex w-full h-[40px] bg-gray-300 rounded-sm"></div>
+          <div className="flex w-full h-[40px] bg-gray-300 rounded-sm relative">
+            <div
+              className="bg-blue-600 h-full rounded-sm"
+              style={{ width: `${progress * 12.5}%` }} // Define a largura da barra com base no progresso
+            ></div>
+            <span className="absolute inset-0 flex items-center justify-center text-white font-semibold">
+              {progress * 12.5}%
+            </span>
+          </div>
           <div className="flex w-full h-auto items-center justify-between mt-3">
             <div className="flex w-[300px] h-[100px] bg-gray-300 rounded-md">
               <select
