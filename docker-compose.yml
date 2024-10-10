@@ -5,7 +5,7 @@ services:
     build:
       context: ../Python-api/ # Caminho para o diretório do backend onde está o Dockerfile
       dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
-    container_name: back-nest
+    container_name: python-back-nest
     ports:
       - "6001:6001"
 
@@ -13,6 +13,6 @@ services:
     build:
       context: ./ # Caminho para o diretório do frontend onde está o Dockerfile
       dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
-    container_name: front-next
+    container_name: python-front-next
     ports:
       - "6000:6000"
