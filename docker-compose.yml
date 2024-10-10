@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
     container_name: python-back-nest
     ports:
-      - "6001:6001"
+      - "2001:2001"
 
   frontend:
     build:
@@ -15,4 +15,4 @@ services:
       dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
     container_name: python-front-next
     ports:
-      - "6000:6000"
+      - "2000:2000"
