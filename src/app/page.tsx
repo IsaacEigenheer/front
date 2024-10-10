@@ -1,5 +1,6 @@
 "use client";
 
+import { url } from "@/services/api";
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
@@ -8,7 +9,7 @@ const ARESComponent: React.FC = () => {
     useState<string>("Select a Customer");
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
-  const socket = io("http://localhost:7001"); // URL do seu servidor WebSocket
+  const socket = io(`http://${url}`); // URL do seu servidor WebSocket
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -40,7 +41,7 @@ const ARESComponent: React.FC = () => {
       type: selectedClient,
     }).toString();
 
-    fetch(`http://localhost:7001/upload?${queryParams}`, {
+    fetch(`http://${url}/upload?${queryParams}`, {
       method: "POST",
       body: formData,
     })

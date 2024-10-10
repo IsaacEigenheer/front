@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ../back/ # Caminho para o diretório do backend onde está o Dockerfile
+      dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
+    container_name: back-nest
+    ports:
+      - "6001:6001"
+
+  frontend:
+    build:
+      context: ./ # Caminho para o diretório do frontend onde está o Dockerfile
+      dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
+    container_name: front-next
+    ports:
+      - "6000:6000"
