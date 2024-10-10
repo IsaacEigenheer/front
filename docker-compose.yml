@@ -3,7 +3,7 @@ version: "3.8"
 services:
   backend:
     build:
-      context: ../back/ # Caminho para o diretório do backend onde está o Dockerfile
+      context: ../Python-api/ # Caminho para o diretório do backend onde está o Dockerfile
       dockerfile: Dockerfile # Nome do Dockerfile (opcional se for o padrão 'Dockerfile')
     container_name: back-nest
     ports:
