@@ -67,6 +67,7 @@ const ARESComponent: React.FC = () => {
 
   useEffect(() => {
     socket.on("progress", (data: number) => {
+      console.log(data)
       setProgress(data); // Atualiza o progresso recebido do WebSocket
     });
 
