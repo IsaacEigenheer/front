@@ -115,6 +115,7 @@ const ARESComponent: React.FC = () => {
                 className="w-full h-auto bg-gray-300 border-none text-2xl px-3 font-semibold text-black rounded-md"
                 value={selectedClient}
               >
+                <option value="Select a Customer" disabled>Selecione um Cliente</option>
                 <option value="HPE">HPE</option>
                 <option value="Jacto">Jacto</option>
                 <option value="Caterpillar">Caterpillar</option>
