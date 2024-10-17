@@ -9,7 +9,8 @@ const ARESComponent: React.FC = () => {
     useState<string>("Select a Customer");
   const [progress, setProgress] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
-  const socket = io(`http://${url}`); // URL do seu servidor WebSocket
+  const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
+  const socket = io(`http://${url}`); 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -18,7 +19,7 @@ const ARESComponent: React.FC = () => {
 
   const selectClient = (client: string) => {
     setSelectedClient(client);
-    toggleDropdown(); // Fecha o dropdown após a seleção
+    toggleDropdown();
   };
 
   const toggleDropdown = () => {
@@ -29,6 +30,7 @@ const ARESComponent: React.FC = () => {
   };
 
   const startProcess = () => {
+    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-600 transform transition-colors duration-200 ease-in-out")
     if (!file) {
       alert("Por favor, selecione um arquivo.");
       return;
@@ -63,7 +65,9 @@ const ARESComponent: React.FC = () => {
         setProgress(0);
       })
       .catch((error) => console.error("Error downloading file:", error));
+    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   };
+
 
   useEffect(() => {
     socket.on("progress", (data: number) => {
@@ -132,7 +136,7 @@ const ARESComponent: React.FC = () => {
 
             <button
               onClick={() => startProcess()}
-              className="flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out"
+              className={buttonStyle}
             >
               Iniciar Conversão
             </button>
