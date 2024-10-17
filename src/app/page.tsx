@@ -30,7 +30,7 @@ const ARESComponent: React.FC = () => {
   };
 
   const startProcess = () => {
-    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-600 transform transition-colors duration-200 ease-in-out")
+    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-500 transform transition-colors duration-200 ease-in-out")
     if (!file) {
       alert("Por favor, selecione um arquivo.");
       return;
