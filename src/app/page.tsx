@@ -11,7 +11,7 @@ const ARESComponent: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   const socket = io(`http://${url}`); 
-  const [pages, setPages] = useState<number>(0)
+  const [pages, setPages] = useState<number>(1)
 
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPages(Number(e.target.value));
@@ -143,6 +143,7 @@ const ARESComponent: React.FC = () => {
               <label className="text-lg mr-2">Selecione a página:</label>
               <input
                 type="number"
+                min={1}
                 value={pages}
                 onChange={handlePageChange}
                 className="w-16 h-10 border border-gray-400 rounded-md text-center"
