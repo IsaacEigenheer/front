@@ -11,6 +11,11 @@ const ARESComponent: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   const socket = io(`http://${url}`); 
+  const [pages, setPages] = useState<number>(0)
+
+  const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPages(Number(e.target.value));
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -40,7 +45,8 @@ const ARESComponent: React.FC = () => {
 
     const queryParams = new URLSearchParams({
       type: selectedClient,
-    }).toString();
+      nPages: pages.toString()
+    })
 
     fetch(`http://${url}/upload?${queryParams}`, {
       method: "POST",
@@ -113,7 +119,7 @@ const ARESComponent: React.FC = () => {
             </span>
           </div>
           <div className="flex w-full h-auto items-center justify-between mt-3">
-            <div className="flex w-[300px] h-[100px] bg-gray-300 rounded-md">
+            <div className="flex flex-col items-start w-[300px] h-auto bg-gray-300 rounded-md p-3">
               <select
                 onChange={(e) => selectClient(e.target.value)}
                 className="w-full h-auto bg-gray-300 border-none text-2xl px-3 font-semibold text-black rounded-md"
@@ -132,6 +138,17 @@ const ARESComponent: React.FC = () => {
                 <option value="JCB">JCB</option>
                 <option value="Embraco">Embraco</option>
               </select>
+
+              <div className="flex items-center mt-3">
+              <label className="text-lg mr-2">Selecione a página:</label>
+              <input
+                type="number"
+                value={pages}
+                onChange={handlePageChange}
+                className="w-16 h-10 border border-gray-400 rounded-md text-center"
+              />
+              </div>
+
             </div>
 
             <button
