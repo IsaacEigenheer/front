@@ -30,12 +30,11 @@ const ARESComponent: React.FC = () => {
   };
 
   const startProcess = () => {
-    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-500 transform transition-colors duration-200 ease-in-out")
     if (!file) {
       alert("Por favor, selecione um arquivo.");
       return;
     }
-
+    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-500 transform transition-colors duration-200 ease-in-out")
     const formData = new FormData();
     formData.append("file", file);
 
@@ -64,8 +63,9 @@ const ARESComponent: React.FC = () => {
         window.URL.revokeObjectURL(url); // Limpa a URL criada
         setProgress(0);
       })
+      .finally(() => setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out"))
       .catch((error) => console.error("Error downloading file:", error));
-    setButtonStyle("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
+     
   };
 
 
