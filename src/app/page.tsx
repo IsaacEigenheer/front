@@ -12,7 +12,7 @@ const ARESComponent: React.FC = () => {
   const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   const socket = io(`http://${url}`); 
   const [pages, setPages] = useState<number>(1)
-  const [id_, setId] = useState<string>()
+  const [id, setId] = useState<string>()
 
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPages(Number(e.target.value));
@@ -89,15 +89,15 @@ const ARESComponent: React.FC = () => {
 
   useEffect(() => {
     socket.on("progress", (data: {progress: number, id: string}) => {
-      if(id_ == data.id) {
-      setProgress(data.progress); // Atualiza o progresso recebido do WebSocket
+      if(id === data.id) {
+        setProgress(data.progress); // Atualiza o progresso recebido do WebSocket
       }
     });
 
     return () => {
       socket.off("progress"); // Limpa o listener quando o componente é desmontado
     };
-  }, [socket]);
+  }, [id]);
 
   return (
     <div className="flex flex-col w-full h-screen bg-[#67A4FF]">
