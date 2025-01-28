@@ -1,7 +1,7 @@
 "use client";
 
 import { url } from "@/services/api";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 const ARESComponent: React.FC = () => {
@@ -12,7 +12,7 @@ const ARESComponent: React.FC = () => {
   const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   const socket = io(`http://${url}`); 
   const [pages, setPages] = useState<number>(1)
-  const [id, setId] = useState<string>()
+  const id = useRef(null);
 
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPages(Number(e.target.value));
@@ -28,13 +28,9 @@ const ARESComponent: React.FC = () => {
     toggleDropdown();
   };
 
-  // function generateUUID() {
-  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-  //     const r = (Math.random() * 16) | 0;
-  //     const v = c === 'x' ? r : (r & 0x3) | 0x8;
-  //     return v.toString(16);
-  //   });
-  // }
+  function generateUUID() {
+    return (Date.now() + Math.random()).toString(36);
+  }
 
   const toggleDropdown = () => {
     const dropdown = document.getElementById("myDropdown");
@@ -52,14 +48,14 @@ const ARESComponent: React.FC = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const queryParams = {
+    id.current = generateUUID();
+
+    const queryParams = new URLSearchParams({
       type: selectedClient,
       nPages: pages.toString(),
-      id: 'a'
-    }
-
-    setId(queryParams.id)
-
+      id: id
+    })
+    
     fetch(`http://${url}/upload?${queryParams}`, {
       method: "POST",
       body: formData,
@@ -90,8 +86,7 @@ const ARESComponent: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     socket.on("progress", (data: {progress: number, id: string}) => {
-      console.log("Evento de progresso recebido:", data)
-      if(id === data.id) {
+      if(id == data.id) {
         setProgress(data.progress); // Atualiza o progresso recebido do WebSocket
       }
     });
@@ -99,7 +94,7 @@ const ARESComponent: React.FC = () => {
     return () => {
       socket.off("progress"); // Limpa o listener quando o componente é desmontado
     };
-  }, [id]);
+  }, [socket]);
 
   return (
     <div className="flex flex-col w-full h-screen bg-[#67A4FF]">
