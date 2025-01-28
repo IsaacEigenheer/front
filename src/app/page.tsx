@@ -55,7 +55,7 @@ const ARESComponent: React.FC = () => {
     const queryParams = {
       type: selectedClient,
       nPages: pages.toString(),
-      id: generateUUID()
+      id: 'a'
     }
 
     setId(queryParams.id)
