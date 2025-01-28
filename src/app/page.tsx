@@ -1,6 +1,7 @@
 "use client";
 
 import { url } from "@/services/api";
+import { randomUUID } from "crypto";
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
@@ -12,6 +13,7 @@ const ARESComponent: React.FC = () => {
   const [buttonStyle, setButtonStyle] = useState<string>("flex w-auto h-full cursor-pointer items-center justify-center font-semibold text-3xl rounded-sm align-middle px-4 py-1 text-black bg-gray-300 hover:bg-gray-200 transform transition-colors duration-200 ease-in-out")
   const socket = io(`http://${url}`); 
   const [pages, setPages] = useState<number>(1)
+  const [id, setId] = useState<any>()
 
   const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPages(Number(e.target.value));
@@ -43,10 +45,13 @@ const ARESComponent: React.FC = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const queryParams = new URLSearchParams({
+    const queryParams = {
       type: selectedClient,
-      nPages: pages.toString()
-    })
+      nPages: pages.toString(),
+      id: crypto.randomUUID()
+    }
+
+    setId(queryParams.id)
 
     fetch(`http://${url}/upload?${queryParams}`, {
       method: "POST",
@@ -76,8 +81,10 @@ const ARESComponent: React.FC = () => {
 
 
   useEffect(() => {
-    socket.on("progress", (data: number) => {
-      setProgress(data); // Atualiza o progresso recebido do WebSocket
+    socket.on("progress", (data: {progress: number, id: any}) => {
+      if(id == data.id) {
+      setProgress(data.progress); // Atualiza o progresso recebido do WebSocket
+      }
     });
 
     return () => {
