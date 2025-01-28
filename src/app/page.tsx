@@ -53,7 +53,7 @@ const ARESComponent: React.FC = () => {
     const queryParams = new URLSearchParams({
       type: selectedClient,
       nPages: pages.toString(),
-      id: id
+      id: id.current || "",
     })
     
     fetch(`http://${url}/upload?${queryParams}`, {
@@ -86,7 +86,7 @@ const ARESComponent: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     socket.on("progress", (data: {progress: number, id: string}) => {
-      if(id == data.id) {
+      if(id.current == data.id) {
         setProgress(data.progress); // Atualiza o progresso recebido do WebSocket
       }
     });
