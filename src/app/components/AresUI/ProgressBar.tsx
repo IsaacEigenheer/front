@@ -16,7 +16,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress, isProcessing }) => 
           <div className="w-full h-4 bg-slate-900 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 ease-out relative"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${progress * 12.5}%` }}
             >
               {isProcessing && <div className="absolute inset-0 bg-white/20 animate-pulse"></div>}
             </div>
@@ -26,7 +26,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ progress, isProcessing }) => 
               {isProcessing ? 'Processando...' : 'Pronto para iniciar'}
             </span>
             <span className="text-sm font-semibold text-white">
-              {Math.round(progress)}%
+              {Math.round(progress * 12.5)}%
             </span>
           </div>
         </div>
